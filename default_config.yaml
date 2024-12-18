@@ -1,0 +1,4 @@
+channels:
+  - counting: 123456
+  - welcome: 123456
+  - bump: 123456
