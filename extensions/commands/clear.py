@@ -16,7 +16,7 @@ class Clear(interactions.Extension):
         description="number of messages to clear",
         required=True,
         opt_type=interactions.OptionType.INTEGER,
-        max_value=30,
+        max_value=100,
         min_value=2,
     )
     @interactions.slash_option(

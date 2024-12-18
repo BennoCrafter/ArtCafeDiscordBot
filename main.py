@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 from config import DEBUG, DEV_GUILD
+from src.data_handler import DataHandler
 from src import logutil
 
 load_dotenv()
@@ -70,5 +71,7 @@ def load_extensions(extensions: list[str]):
 
 
 if __name__ == "__main__":
+    data_handler = DataHandler.instance(Path("data.json"), default_template_file=Path("resources/data_template.json"))
+
     load_extensions([f"{".".join(path.parent.parts)}.{path.stem}" for path in get_all_extensions(extensions_base_path)])
     client.start()

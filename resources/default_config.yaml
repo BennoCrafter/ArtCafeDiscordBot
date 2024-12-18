@@ -1,4 +1,5 @@
 channels:
-  - counting: 123456
-  - welcome: 123456
-  - bump: 123456
+  counting: 123456
+  welcome: 123456
+  bump: 123456
+  event_info: 123456
