@@ -87,8 +87,9 @@ class PromptCog(interactions.Extension):
         "add_prompt", description="Add an art prompt"
     )
     @interactions.slash_option("prompt", "The prompt to add", required=True, opt_type=interactions.OptionType.STRING)
-    async def add_prompt(self, ctx: interactions.SlashContext, prompt: str, author: str):
+    async def add_prompt(self, ctx: interactions.SlashContext, prompt: str):
         try:
+            author: str = ctx.author.display_name
             prompt_id = len(self.art_prompts)
             self.art_prompts.append(Prompt(prompt, author, prompt_id))
             write_prompts(self.art_prompts)
