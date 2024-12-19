@@ -98,6 +98,9 @@ class Ticket(interactions.Extension):
         )
 
         await ticket_channel.send(
+            content=f"<@{CONFIG.roles.staff}>"
+        )
+        await ticket_channel.send(
             content=f"{ctx.author.mention} Welcome to your ticket!",
             embed=embed,
             components=close_button
