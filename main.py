@@ -34,7 +34,7 @@ if not os.environ.get("TOKEN"):
 client = interactions.Client(
     token=os.environ.get("TOKEN"),
     activity=interactions.Activity(
-        name="with interactions", type=interactions.ActivityType.PLAYING
+        name="with colors", type=interactions.ActivityType.PLAYING
     ),
     intents=interactions.Intents.ALL,
     debug_scope=DEV_GUILD,
@@ -43,7 +43,7 @@ client = interactions.Client(
 
 @client.listen()
 async def on_startup():
-    logger.info(f"Logged in as {client.user}")
+    logger.info(f"Logged in as {client.user.display_name}")
 
 
 def get_all_extensions(for_path: Path) -> list[Path]:
@@ -71,6 +71,13 @@ def load_extensions(extensions: list[str]):
 
 
 if __name__ == "__main__":
+    args = sys.argv
+    using_test_bot = False
+    if len(args) > 1:
+        if args[1] in ['test', '--test', '-t']:
+            using_test_bot = True
+            logger.info("Using test bot configuration")
+
     data_handler = DataHandler.instance(Path("data.json"), default_template_file=Path("resources/data_template.json"))
 
     load_extensions([f"{".".join(path.parent.parts)}.{path.stem}" for path in get_all_extensions(extensions_base_path)])

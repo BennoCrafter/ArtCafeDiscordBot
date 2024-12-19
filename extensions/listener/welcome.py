@@ -14,12 +14,12 @@ class Welcome(interactions.Extension):
 
     @listen()
     async def on_member_add(self, event: MemberAdd):
-        logger.info(f"New member joined: {event.member.display_name}")
+        # logger.info(f"New member joined: {event.member.display_name}")
 
         embed = interactions.Embed(
             title=f"Welcome, {event.member.display_name}!",
-            description=f"Welcome to the server! Have fun and enjoy your stay!",
-            color=0x00ff00
+            description=f"Welcome on ArtsCafe! Have fun and enjoy your stay!",
+            color=interactions.Color.from_hex("ba6e5e")
         )
 
         embed.set_thumbnail(url=event.member.avatar.url)

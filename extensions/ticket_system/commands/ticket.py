@@ -107,8 +107,7 @@ class Ticket(interactions.Extension):
 
     @interactions.component_callback("close_ticket")
     @interactions.check(
-        interactions.has_any_role(CONFIG.roles.staff)
+        interactions.has_role(CONFIG.roles.staff)
     )
     async def close_ticket(self, ctx: interactions.ComponentContext):
         await ctx.channel.delete()
-        await ctx.author.send("Ticket has been closed.")
