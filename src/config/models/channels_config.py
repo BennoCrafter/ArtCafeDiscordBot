@@ -6,4 +6,5 @@ class ChannelsConfig:
     welcome: int
     bump: int
     event_info: int
-    event_vote: int
+    ticket_setup: int
+    tickets_category: int
