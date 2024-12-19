@@ -98,7 +98,7 @@ class Ticket(interactions.Extension):
         )
 
         await ticket_channel.send(
-            content=f"<@{CONFIG.roles.staff}>"
+            content=f"<@&{CONFIG.roles.staff}>"
         )
         await ticket_channel.send(
             content=f"{ctx.author.mention} Welcome to your ticket!",
