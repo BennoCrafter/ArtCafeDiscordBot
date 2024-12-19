@@ -79,8 +79,14 @@ class Event(interactions.Extension):
 
         await channel.send("# Event has ended!")
 
+        event_vote_channel = self.get_channel(ctx, CONFIG.channels.event_vote)
+        if event_vote_channel is None:
+            logger.error("Could not find the event vote channel")
+            await ctx.send("Could not find the event vote channel", ephemeral=True)
+            return
+
         for embed, e in zip(embeds, current_event["submissions"]):
-            msg = await channel.send(embed=embed)
+            msg = await event_vote_channel.send(embed=embed)
             current_event = dh.get("current_event")
             current_event["submissions"][embeds.index(embed)]["submission_id"] = msg.id
             dh.set("current_event", current_event)
@@ -102,10 +108,10 @@ class Event(interactions.Extension):
 
         embeds: list[interactions.Embed] = self.generate_embeds(current_event)
 
-        channel = self.get_channel(ctx, CONFIG.channels.event_info)
-        if channel is None:
-            logger.error("Could not find the event info channel")
-            await ctx.send("Could not find the event info channel", ephemeral=True)
+        event_vote_channel = self.get_channel(ctx, CONFIG.channels.event_vote)
+        if event_vote_channel is None:
+            logger.error("Could not find the event vote channel")
+            await ctx.send("Could not find the event vote channel", ephemeral=True)
             return
 
         sorted_data = sorted(dh.get("current_event.submissions"), key=lambda x: x["count"], reverse=True)
@@ -146,7 +152,7 @@ class Event(interactions.Extension):
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/904269851302686730.png")
 
         await ctx.send("Sending podium", ephemeral=True)
-        await channel.send(embeds=embed)
+        await event_vote_channel.send(embeds=embed)
 
 
     @interactions.listen(interactions.events.MessageReactionAdd)
