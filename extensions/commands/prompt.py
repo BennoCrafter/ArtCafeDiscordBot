@@ -50,11 +50,17 @@ class PromptCog(interactions.Extension):
     @interactions.slash_command(
         "prompt", description="Get an art prompt"
     )
-    async def prompt(self, ctx: interactions.SlashContext):
-        art_prompt = random.choice(self.art_prompts)
+    @interactions.slash_option("prompt_id", "The index of the prompt to get", required=False, opt_type=interactions.OptionType.INTEGER)
+    async def prompt(self, ctx: interactions.SlashContext, prompt_id: int | None = None):
+        art_prompt = random.choice(self.art_prompts) if prompt_id is None else self.get_prompt_by_id(prompt_id)
+        if not art_prompt:
+            await ctx.send("Prompt not found!", ephemeral=True)
+            return
+
         e = interactions.Embed(title="Art Prompt", description=art_prompt.prompt, color=interactions.Color.random())
         e.set_footer(text=f"By: {art_prompt.author} | Nr: {art_prompt.id}")
         await ctx.send(embed=e)
+
 
     @interactions.slash_command(
         "remove_prompt", description="Delete an art prompt by id"
@@ -63,19 +69,16 @@ class PromptCog(interactions.Extension):
     async def remove_prompt(self, ctx: interactions.SlashContext, prompt_id: int):
         try:
             if 0 <= prompt_id < len(self.art_prompts):
-                removed_prompt = None
-                for i, prompt in enumerate(self.art_prompts):
-                    if prompt.id == prompt_id:
-                        removed_prompt = prompt
-                        del self.art_prompts[i]
-                        break
-                if not removed_prompt:
+                to_remove_prompt = self.get_prompt_by_id(prompt_id)
+                if not to_remove_prompt:
                     await ctx.send(f"Could not find prompt with ID {prompt_id}", ephemeral=True)
                     return
 
+                self.art_prompts.remove(to_remove_prompt)
                 write_prompts(self.art_prompts)
-                e = interactions.Embed(title="Prompt Removed", description=f"Removed prompt: {removed_prompt.prompt}", color=interactions.Color.random())
-                e.set_footer(text=f"Originally by: {removed_prompt.author}")
+
+                e = interactions.Embed(title="Prompt Removed", description=f"Removed prompt: {to_remove_prompt.prompt}", color=interactions.Color.random())
+                e.set_footer(text=f"Originally by: {to_remove_prompt.author}")
                 await ctx.send(embed=e)
             else:
                 await ctx.send("Invalid prompt ID - must be between 0 and " + str(len(self.art_prompts)-1), ephemeral=True)
@@ -99,3 +102,9 @@ class PromptCog(interactions.Extension):
         except Exception as err:
             logger.error(f"Error adding prompt: {err}")
             await ctx.send("Failed to add prompt!", ephemeral=True)
+
+    def get_prompt_by_id(self, prompt_id: int) -> Prompt | None:
+        for prompt in self.art_prompts:
+            if prompt.id == prompt_id:
+                return prompt
+        return None

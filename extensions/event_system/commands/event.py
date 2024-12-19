@@ -48,7 +48,9 @@ class Event(interactions.Extension):
             return
 
         dh.set("current_event", value={"name": name, "description": description, "end_date": end_date, "closed": False, "completed": False, "submissions": []})
-        await channel.send(f"# New Event: {name}")
+        e = interactions.Embed(title=name, description=description, color=interactions.Color.random(), footer=interactions.EmbedFooter(text=f"Ends: {end_date}"))
+        await channel.send("🎉 New Event started! 🎉")
+        await channel.send(embed=e)
 
 
     @event.subcommand(

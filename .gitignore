@@ -6,3 +6,4 @@ venv/
 config.yaml
 data.json
 .env
+resources/art_promts.txt
