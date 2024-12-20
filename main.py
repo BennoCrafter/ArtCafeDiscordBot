@@ -14,6 +14,9 @@ from pathlib import Path
 from config import DEBUG, DEV_GUILD
 from src.data_handler import DataHandler
 from src import logutil
+from src.config import CONFIG
+from src.load_gifs import load_gifs
+
 
 load_dotenv()
 
@@ -69,8 +72,21 @@ def load_extensions(extensions: list[str]):
         except interactions.errors.ExtensionLoadException as e:
             logger.exception(f"Failed to load extension {extension}.", exc_info=e)
 
+def setup():
+    if CONFIG.setuped:
+        return
+
+    logger.info("Setting up configuration")
+
+
+    CONFIG.setuped = True
+
+    logger.info("Beginning to load gifs")
+    load_gifs()
+    logger.info("Finished loading gifs")
 
 if __name__ == "__main__":
+    setup()
     args = sys.argv
     using_test_bot = False
     if len(args) > 1:

@@ -6,3 +6,4 @@ from src.config.models.roles_config import RolesConfig
 class Config:
     channels: ChannelsConfig
     roles: RolesConfig
+    setuped: bool
