@@ -8,3 +8,4 @@ class ChannelsConfig:
     event_info: int
     ticket_setup: int
     tickets_category: int
+    rules: int
