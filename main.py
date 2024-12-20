@@ -73,16 +73,12 @@ def load_extensions(extensions: list[str]):
             logger.exception(f"Failed to load extension {extension}.", exc_info=e)
 
 def setup():
-    if CONFIG.setuped:
+    gifs_url: Path = Path("resources/gif_urls.json")
+    if gifs_url.exists():
         return
 
-    logger.info("Setting up configuration")
-
-
-    CONFIG.setuped = True
-
     logger.info("Beginning to load gifs")
-    load_gifs()
+    load_gifs(gifs_url)
     logger.info("Finished loading gifs")
 
 if __name__ == "__main__":
