@@ -16,6 +16,7 @@ from src.data_handler import DataHandler
 from src import logutil
 from src.config import CONFIG
 from src.load_gifs import load_gifs
+from src.translated_string import TranslatedString
 
 
 load_dotenv()
@@ -82,14 +83,9 @@ def setup():
     logger.info("Finished loading gifs")
 
 if __name__ == "__main__":
-    setup()
-    args = sys.argv
-    using_test_bot = False
-    if len(args) > 1:
-        if args[1] in ['test', '--test', '-t']:
-            using_test_bot = True
-            logger.info("Using test bot configuration")
+    TranslatedString.setup(Path("resources/translations.json"), CONFIG.language)
 
+    setup()
     data_handler = DataHandler.instance(Path("data.json"), default_template_file=Path("resources/data_template.json"))
 
     load_extensions([f"{".".join(path.parent.parts)}.{path.stem}" for path in get_all_extensions(extensions_base_path)])

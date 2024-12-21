@@ -4,6 +4,7 @@ from src.logutil import init_logger
 from src.config import CONFIG
 from datetime import datetime
 from src.data_handler import DataHandler
+from src.translated_string import TranslatedString
 
 
 logger = init_logger(os.path.basename(__file__))
@@ -13,7 +14,7 @@ dh = DataHandler.instance()
 class Event(interactions.Extension):
 
     @interactions.slash_command(
-        "event", description="Base Event command"
+        "event", description=str(TranslatedString("Base Event command"))
     )
     async def event(self, ctx: interactions.SlashContext):
         ...
@@ -22,69 +23,69 @@ class Event(interactions.Extension):
         interactions.has_any_role(CONFIG.roles.staff)
     )
     @event.subcommand(
-        "create", sub_cmd_description="Command to create an event"
+        "create", sub_cmd_description=str(TranslatedString("Command to create an event"))
     )
     @interactions.slash_option(
-        "name", "Name of the event", required=True,
+        "name", str(TranslatedString("Name of the event")), required=True,
         opt_type=interactions.OptionType.STRING
     )
     @interactions.slash_option(
-        "description", "Description of the event", required=True,
+        "description", str(TranslatedString("Description of the event")), required=True,
         opt_type=interactions.OptionType.STRING
     )
     @interactions.slash_option(
-        "end_date", "End date of the event", required=True,
+        "end_date", str(TranslatedString("End date of the event")), required=True,
         opt_type=interactions.OptionType.STRING
     )
     async def create(self, ctx: interactions.SlashContext, name: str, description: str, end_date: str):
-        await ctx.send("Creating an event", ephemeral=True)
+        await ctx.send(str(TranslatedString("Creating an event")), ephemeral=True)
 
-        parsed_date: datetime = datetime.strptime(end_date, "%d.%m.%Y")
+        try:
+            parsed_date: datetime = datetime.strptime(end_date, "%d.%m.%Y")
+        except ValueError:
+            await ctx.send(str(TranslatedString("Invalid date format. Use DD.MM.YYYY")), ephemeral=True)
+            return
 
         channel = self.get_channel(ctx, CONFIG.channels.event_info)
         if channel is None:
             logger.error("Could not find the event info channel")
-            await ctx.send("Could not find the event info channel", ephemeral=True)
+            await ctx.send(str(TranslatedString("Could not find the event info channel")), ephemeral=True)
             return
 
         dh.set("current_event", value={"name": name, "description": description, "end_date": end_date, "closed": False, "completed": False, "submissions": []})
         e = interactions.Embed(title=name, description=description, color=interactions.Color.random(), footer=interactions.EmbedFooter(text=f"Ends: {end_date}"))
-        await channel.send("🎉 New Event started! 🎉")
+        await channel.send(str(TranslatedString("🎉 New Event started! 🎉")))
         await channel.send(embed=e)
 
-
     @event.subcommand(
-        "close", sub_cmd_description="Command to close an event"
+        "close", sub_cmd_description=str(TranslatedString("Command to close an event"))
     )
     async def close(self, ctx: interactions.SlashContext):
         current_event = dh.get("current_event")
 
         if current_event is None:
-            await ctx.send("No event is currently running", ephemeral=True)
+            await ctx.send(str(TranslatedString("No event is currently running")), ephemeral=True)
             return
         if current_event["closed"]:
-            await ctx.send("Event is already closed", ephemeral=True)
+            await ctx.send(str(TranslatedString("Event is already closed")), ephemeral=True)
             return
 
-
-        await ctx.send("Closing event", ephemeral=True)
-
+        await ctx.send(str(TranslatedString("Closing event")), ephemeral=True)
         dh.set("current_event.closed", value=True)
 
-        embeds: list[interactions.Embed] = self.generate_embeds(current_event)
+        embeds = self.generate_embeds(current_event)
 
         channel = self.get_channel(ctx, CONFIG.channels.event_info)
         if channel is None:
             logger.error("Could not find the event info channel")
-            await ctx.send("Could not find the event info channel", ephemeral=True)
+            await ctx.send(str(TranslatedString("Could not find the event info channel")), ephemeral=True)
             return
 
-        await channel.send("# Event has ended!")
-
+        await channel.send(str(TranslatedString("# Event has ended!")))
         event_channel = self.get_channel(ctx, CONFIG.channels.event_info)
         if event_channel is None:
             logger.error("Could not find the event vote channel")
-            await ctx.send("Could not find the event vote channel", ephemeral=True)
+            await ctx.send(str(TranslatedString("Could not find the event vote channel")), ephemeral=True)
             return
 
         for embed, e in zip(embeds, current_event["submissions"]):
@@ -92,32 +93,30 @@ class Event(interactions.Extension):
             current_event = dh.get("current_event")
             current_event["submissions"][embeds.index(embed)]["submission_id"] = msg.id
             dh.set("current_event", current_event)
-            await msg.add_reaction(":star:")
+            await msg.add_reaction("⭐")
 
     @event.subcommand(
-        "results", sub_cmd_description="Command to show results of current event"
+        "results", sub_cmd_description=str(TranslatedString("Command to show results of current event"))
     )
     async def results(self, ctx: interactions.SlashContext):
         current_event = dh.get("current_event")
 
         if current_event is None:
-            await ctx.send("No event is currently running", ephemeral=True)
+            await ctx.send(str(TranslatedString("No event is currently running")), ephemeral=True)
             return
 
         if not current_event["closed"]:
-            await ctx.send("Event is not yet closed", ephemeral=True)
+            await ctx.send(str(TranslatedString("Event is not yet closed")), ephemeral=True)
             return
 
-        embeds: list[interactions.Embed] = self.generate_embeds(current_event)
-
+        embeds = self.generate_embeds(current_event)
         event_channel = self.get_channel(ctx, CONFIG.channels.event_info)
         if event_channel is None:
             logger.error("Could not find the event vote channel")
-            await ctx.send("Could not find the event vote channel", ephemeral=True)
+            await ctx.send(str(TranslatedString("Could not find the event vote channel")), ephemeral=True)
             return
 
-        sorted_data = sorted(dh.get("current_event.submissions"), key=lambda x: x["count"], reverse=True)
-
+        sorted_data = sorted(current_event["submissions"], key=lambda x: x["count"], reverse=True)
         emojis = ["🥇", "🥈", "🥉"]
         top_winners = sorted_data[:3]
         honorable_mentions = sorted_data[3:]
@@ -134,48 +133,20 @@ class Event(interactions.Extension):
             honorable_lines.append(f"🎖️ **{rank}. {participant['author']['name']}** - {participant['count']}")
 
         embed = interactions.Embed(
-            title="🏆 Winners' Podium 🏆",
+            title=str(TranslatedString("🏆 Winners' Podium 🏆")),
             color=0xFFD700
         )
+        embed.add_field(name=str(TranslatedString("🥳 Top Winners")), value="\n".join(podium_lines), inline=False)
 
-        embed.add_field(
-            name="🥳 Top Winners",
-            value="\n".join(podium_lines),
-            inline=False
-        )
         if honorable_lines:
-            embed.add_field(
-                name="🎖️ Honorable Mentions",
-                value="\n".join(honorable_lines),
-                inline=False
-            )
+            embed.add_field(name=str(TranslatedString("🎖️ Honorable Mentions")), value="\n".join(honorable_lines), inline=False)
 
-        embed.set_footer(text="✨ Celebrate the champions! ✨")
+        embed.set_footer(text=str(TranslatedString("✨ Celebrate the champions! ✨")))
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/904269851302686730.png")
 
-        await ctx.send("Sending podium", ephemeral=True)
-        await event_channel.send(embeds=embed)
+        await ctx.send(str(TranslatedString("Sending podium")), ephemeral=True)
+        await event_channel.send(embed=embed)
 
-
-    @interactions.listen(interactions.events.MessageReactionAdd)
-    async def on_reaction_add(self, event: interactions.events.MessageReactionAdd):
-        submissions = dh.get("current_event.submissions")
-
-        if not self.is_reaction_for_event(event, submissions ):
-            return
-
-        self.change_submission_count(submissions=submissions,submisson_id=event.message.id, count=1)
-
-        return
-
-    @interactions.listen(interactions.events.MessageReactionRemove)
-    async def on_reaction_remove(self, event: interactions.events.MessageReactionRemove):
-        submissions = dh.get("current_event.submissions")
-
-        if not self.is_reaction_for_event(event, submissions):
-            return
-
-        self.change_submission_count(submissions=submissions,submisson_id=event.message.id, count=-1)
 
     @staticmethod
     def generate_embeds(current_event: dict) -> list[interactions.Embed]:

@@ -5,6 +5,7 @@ from interactions import listen
 from interactions.api.events import MemberAdd
 from src.config import CONFIG
 from src import logutil
+from src.translated_string import TranslatedString
 
 
 logger = logutil.init_logger(os.path.basename(__file__))
@@ -17,8 +18,8 @@ class Welcome(interactions.Extension):
         # logger.info(f"New member joined: {event.member.display_name}")
 
         embed = interactions.Embed(
-            title=f"Welcome, {event.member.display_name}!",
-            description=f"Welcome on ArtsCafe! Have fun and enjoy your stay!",
+            title=str(TranslatedString("Welcome, {0}", event.member.display_name)),
+            description=str(TranslatedString("Welcome on Art Cafe! Have fun and enjoy your stay!")),
             color=interactions.Color.from_hex("ba6e5e")
         )
 

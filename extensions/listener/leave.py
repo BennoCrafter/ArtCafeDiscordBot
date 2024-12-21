@@ -5,6 +5,7 @@ from interactions import listen
 from interactions.api.events import MemberRemove
 from src.config import CONFIG
 from src import logutil
+from src.translated_string import TranslatedString
 
 
 logger = logutil.init_logger(os.path.basename(__file__))
@@ -20,4 +21,4 @@ class Leave(interactions.Extension):
         if not isinstance(welcome_channel, interactions.GuildText):
             return
 
-        await welcome_channel.send(f"Sadly, {event.member.display_name} has left us. :wave:")
+        await welcome_channel.send(str(TranslatedString("Sadly, {0} has left us. :wave:", event.member.display_name)))
