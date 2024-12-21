@@ -38,7 +38,7 @@ if not os.environ.get("TOKEN"):
 client = interactions.Client(
     token=os.environ.get("TOKEN"),
     activity=interactions.Activity(
-        name="with colors", type=interactions.ActivityType.PLAYING
+        name=str(TranslatedString("with colors")), type=interactions.ActivityType.PLAYING
     ),
     intents=interactions.Intents.ALL,
     debug_scope=DEV_GUILD,
