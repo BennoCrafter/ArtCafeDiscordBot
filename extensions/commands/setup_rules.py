@@ -41,5 +41,11 @@ class SetupRules(interactions.Extension):
 
         await ctx.send("Sending rules...", ephemeral=True)
 
-        rules_msg = await rules_channel.send(embed=interactions.Embed(title="Rules 📗", description=rules, color=interactions.Color.from_hex("7CE87C")))
+        embed = interactions.Embed(title="Rules 📗", color=0x00ff00)
+        rules_list = str(rules).split("\n")
+        for i, rule in enumerate(rules_list):
+            print(rule)
+            embed.add_field(name=f"{i}.", value=rule.strip(), inline=False)
+
+        rules_msg = await rules_channel.send(embed=embed)
         await rules_msg.add_reaction(":white_check_mark:")

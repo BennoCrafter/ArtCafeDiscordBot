@@ -20,7 +20,9 @@ category_emoji = {
     "poke": "👉",
     "highfive": "🙌",
     "bonk": "🔨",
-    "clap": "👏"
+    "clap": "👏",
+    "slap": "👋💥",
+    "wave": "👋"
 }
 
 action_verbs = {
@@ -31,7 +33,9 @@ action_verbs = {
     "pat": "pats",
     "poke": "pokes",
     "highfive": "high fives",
-    "bonk": "bonks"
+    "bonk": "bonks",
+    "slap": "slaps",
+    "wave": "waves at"
 }
 
 
@@ -113,6 +117,30 @@ class Rolelplay(interactions.Extension):
     )
     async def highfive(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "highfive", user)
+
+    @roleplay.subcommand(
+        "slap", sub_cmd_description="Slap someone"
+    )
+    @interactions.slash_option(
+        "user",
+        "The user to slap",
+        opt_type=interactions.OptionType.MENTIONABLE,
+        required=False,
+    )
+    async def slap(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
+        await self.send_roleplay(ctx, "slap", user)
+
+    @roleplay.subcommand(
+        "wave", sub_cmd_description="Wave at someone"
+    )
+    @interactions.slash_option(
+        "user",
+        "The user to wave at",
+        opt_type=interactions.OptionType.MENTIONABLE,
+        required=False,
+    )
+    async def wave(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
+        await self.send_roleplay(ctx, "wave", user)
 
     @roleplay.subcommand(
         "bonk", sub_cmd_description="Bonk someone"

@@ -16,7 +16,8 @@ categories: list[str] = [
 "slap",
 "highfive",
 "bonk",
-"clap"
+"clap",
+"wave"
 ]
 
 all_data = {}
@@ -42,3 +43,9 @@ def load_gifs(file_path: Path, amount: int = 100):
         all_data.update(urls)
 
     write_gifs(file_path, all_data)
+
+if __name__ == "__main__":
+    gifs_url: Path = Path("resources/gif_urls.json")
+    print("Beginning to load gifs")
+    load_gifs(gifs_url)
+    print("Finished loading gifs")
