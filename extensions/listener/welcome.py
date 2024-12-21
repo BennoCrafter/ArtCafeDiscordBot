@@ -9,8 +9,8 @@ from src import logutil
 
 logger = logutil.init_logger(os.path.basename(__file__))
 
-class Welcome(interactions.Extension):
-    """Welcome the user to the server"""
+class Leave(interactions.Extension):
+    """Listen for member leave events."""
 
     @listen(MemberRemove)
     async def on_member_remove(self, event: MemberRemove):
