@@ -20,17 +20,4 @@ class BotMentions(interactions.Extension):
             f"@{self.bot.user.id}" in msg.content
             or f"<@{self.bot.user.id}>" in msg.content
         ):
-            embed = interactions.Embed(
-                title="It seems like you mentioned me",
-                description="".join(
-                    [
-                        "I could not help much but noticed you mentioned me.",
-                        f"You can type ``/`` and choose **{self.bot.user.username}**",
-                        " to start using me. Alternatively, you can use ",
-                        "`$help` or `/help` to see a list of available ",
-                        "commands. Thank you for choosing Articuno.",
-                    ],
-                ),
-                color=0x6AA4C1,
-            )
-            await msg.channel.send(embeds=embed)
+            await msg.channel.send("What's up? :smile:")
