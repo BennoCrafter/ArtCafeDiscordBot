@@ -21,4 +21,4 @@ class BumpReminder(interactions.Extension):
         # sleep for 2 hours
         await asyncio.sleep(60*60*2)
 
-        await event.message.channel.send(e=interactions.Embed("Bump Reminder", "It's time to bump the server! :tada:"))
+        await event.message.channel.send(embed=interactions.Embed("Bump Reminder", "It's time to bump the server! :tada:"))
