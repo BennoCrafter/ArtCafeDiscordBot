@@ -20,13 +20,11 @@ category_emoji = {
     "poke": "👉",
     "highfive": "🙌",
     "bonk": "🔨",
-    "clap": "👏",
     "slap": "👋💥",
     "wave": "👋"
 }
 
 action_verbs = {
-    "clap": "claps",
     "cuddle": "cuddles",
     "hug": "hugs",
     "kiss": "kisses",
