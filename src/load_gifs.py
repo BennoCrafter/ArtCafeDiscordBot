@@ -5,7 +5,6 @@ import json
 
 all_endpoints_url: str = "https://nekos.best/api/v2/endpoints"
 base_url: str = "https://nekos.best/api/v2/%s?amount=%d"
-prompt: str = "hug"
 
 categories: list[str] = [
 "cuddle",
@@ -17,7 +16,8 @@ categories: list[str] = [
 "highfive",
 "bonk",
 "clap",
-"wave"
+"wave",
+"cry"
 ]
 
 all_data = {}

@@ -21,7 +21,8 @@ category_emoji = {
     "highfive": "🙌",
     "bonk": "🔨",
     "slap": "👋💥",
-    "wave": "👋"
+    "wave": "👋",
+    "cry": "😢"
 }
 
 action_verbs = {
@@ -33,7 +34,8 @@ action_verbs = {
     "highfive": "high fives",
     "bonk": "bonks",
     "slap": "slaps",
-    "wave": "waves at"
+    "wave": "waves at",
+    "cry": "cries"
 }
 
 
@@ -139,6 +141,18 @@ class Rolelplay(interactions.Extension):
     )
     async def wave(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "wave", user)
+
+    @roleplay.subcommand(
+        "cry", sub_cmd_description="Cry"
+    )
+    @interactions.slash_option(
+        "user",
+        "The user to cry to",
+        opt_type=interactions.OptionType.MENTIONABLE,
+        required=False,
+    )
+    async def cry(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
+        await self.send_roleplay(ctx, "cry", user)
 
     @roleplay.subcommand(
         "bonk", sub_cmd_description="Bonk someone"
