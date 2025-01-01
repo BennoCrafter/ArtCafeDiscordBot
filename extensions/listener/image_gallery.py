@@ -14,7 +14,7 @@ class ImageGallery(interactions.Extension):
         if len(event.message.attachments) == 0:
             return
         
-        if event.channel.id != CONFIG.channel.image_gallery:
+        if event.message.channel.id != CONFIG.channel.image_gallery:
             return
 
         await event.message.add_reaction("❤️")
