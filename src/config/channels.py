@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import Optional, List, Any, Union
 
 @dataclass
-class ChannelsConfig:
+class Channels:
     counting: int
     welcome: int
     bump: int
