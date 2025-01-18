@@ -60,7 +60,7 @@ def get_all_extensions(for_path: Path) -> list[Path]:
             paths += get_all_extensions(path)
             continue
 
-        if not path.suffix == ".py" or path.name.startswith("_"):
+        if path.suffix != ".py" or path.name.startswith("_"):
             continue
 
         paths.append(path)

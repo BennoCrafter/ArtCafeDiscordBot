@@ -2,3 +2,4 @@ discord-py-interactions
 python-dotenv
 pyyaml
 requests
+git+https://github.com/bennocrafter/yaml2dataclass.git
