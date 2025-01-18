@@ -10,3 +10,4 @@ class Channels:
     ticket_setup: int
     tickets_category: int
     rules: int
+    image_gallery: int
