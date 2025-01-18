@@ -1,5 +1,6 @@
 import interactions
 from interactions.api.events import MessageCreate
+from src.config import CONFIG
 from src.logutil import init_logger
 import os
 import asyncio
@@ -16,9 +17,8 @@ class BumpReminder(interactions.Extension):
         if event.message.author.id != disboard_id:
             return
 
-        logger.info("Bump received!")
         await event.message.add_reaction("❤️")
         # sleep for 2 hours
         await asyncio.sleep(60*60*2)
-
+        await event.message.channel.send(f"<@&{CONFIG.roles.bump}>")
         await event.message.channel.send(embed=interactions.Embed("Bump Reminder", "It's time to bump the server! :tada:"))

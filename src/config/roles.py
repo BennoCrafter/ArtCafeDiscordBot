@@ -5,3 +5,4 @@ from typing import Optional, List, Any, Union
 class Roles:
     staff: int
     member: int
+    bump: int
