@@ -32,12 +32,14 @@ just an indicator. You may safely ignore",
 
 extensions_base_path = Path("extensions")
 
-if not os.environ.get("TOKEN"):
+token_type = "TOKEN" if len(sys.argv) == 1 else "DEV_TOKEN" if sys.argv[1] == "--dev" else "TOKEN"
+
+if not os.environ.get(token_type):
     logger.critical("TOKEN variable not set. Cannot continue")
     sys.exit(1)
 
 client = interactions.Client(
-    token=os.environ.get("TOKEN"),
+    token=os.environ.get(token_type),
     activity=interactions.Activity(
         name=str(TranslatedString("with colors")), type=interactions.ActivityType.PLAYING
     ),
