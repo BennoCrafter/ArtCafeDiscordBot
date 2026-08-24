@@ -28,9 +28,9 @@ class SendDmToOptedIn(interactions.Extension):
         name="role_id",
         description="Role id to which members to send message",
         required=True,
-        opt_type=OptionType.INTEGER,
+        opt_type=OptionType.STRING,
     )
-    async def send_dm(self, ctx, text: str, role_id: int):
+    async def send_dm(self, ctx, text: str, role_id: str):
         await ctx.defer(ephemeral=True)
 
         sent = 0
@@ -42,12 +42,24 @@ class SendDmToOptedIn(interactions.Extension):
                 continue
 
             # Use the role selected in /send_dm
-            if not any(role.id == role_id for role in member.roles):
+            if not any(str(role.id) == role_id for role in member.roles):
                 continue
 
             try:
                 await asyncio.wait_for(
-                    member.user.send(text),
+                    member.user.send(
+                        """**ART CAFE – DIE CHALLENGE STARTET! :coffee::art:**
+
+                        Hey! Lange war der Server inaktiv und ist schon ausgestorben, doch wir wollen ihm eine neue Chance geben. Seid dabei und lasst den einst so farbenfrohen Server wieder etwas Farbe schenken :) Ladet gerne eure Freunde ein! Euch werden verschiedene Minigames und Challenges erwarten.
+
+                        Und deshalb starten wir auch direkt mit einer kleinen Challenge:
+                        Das Thema für den Monat September ist "Portrait". Also malt ein paar Gesichter! Es ist eine super Übung um Proportionen, Licht und Schatten zu lernen. Ihr könnt ein längeres Gemälde malen oder auch nur eine kleine Skizze anfertigen. Macht gerne mit und habt an oberster Stelle stehend Spaß. Falls ihr noch ein paar Tipps braucht oder fragen habt, dann meldet euch hier!
+
+                        :art: Egal, ob ihr zeichnet, malt, designt, fotografiert oder einfach generell ein Auge für Kunst habt – jede Art von Kunst und jeder hier ist herzlich willkommen! :sparkles:
+
+                        Seid ihr dabei? Dann lasst uns gemeinsam den Server wieder aufleben lassen!
+                        """
+                    ),
                     timeout=DM_TIMEOUT,
                 )
                 sent += 1
