@@ -4,5 +4,8 @@
       "count": 0
     }
   },
-  "current_event": null
+  "current_event": null,
+  "bump_scoreboard": {
+    "users": {}
+  }
 }

@@ -1,5 +1,16 @@
 channels:
-  counting: 123456
-  welcome: 123456
-  bump: 123456
-  event_info: 123456
+  counting: 123
+  welcome: 123
+  bump: 123
+  event_info: 123
+  ticket_setup: 123
+  tickets_category: 123
+  rules: 123
+  image_gallery: 123
+
+roles:
+  staff: 123
+  member: 123
+  bump: 123
+
+language: "de"
