@@ -1,12 +1,11 @@
 import os
+import random
+from pathlib import Path
 
 import interactions
 
 from src import logutil
 from src.load_gifs import get_gif_urls
-from pathlib import Path
-import random
-
 
 logger = logutil.init_logger(os.path.basename(__file__))
 
@@ -22,7 +21,7 @@ category_emoji = {
     "bonk": "🔨",
     "slap": "👋💥",
     "wave": "👋",
-    "cry": "😢"
+    "cry": "😢",
 }
 
 action_verbs = {
@@ -35,20 +34,15 @@ action_verbs = {
     "bonk": "bonks",
     "slap": "slaps",
     "wave": "waves at",
-    "cry": "cries"
+    "cry": "cries",
 }
 
 
 class Rolelplay(interactions.Extension):
-    @interactions.slash_command(
-        "roleplay", description="base roleplay command"
-    )
-    async def roleplay(self, ctx: interactions.SlashContext):
-        ...
+    @interactions.slash_command("roleplay", description="base roleplay command")
+    async def roleplay(self, ctx: interactions.SlashContext): ...
 
-    @roleplay.subcommand(
-        "hug", sub_cmd_description="Hug someone"
-    )
+    @roleplay.subcommand("hug", sub_cmd_description="Hug someone")
     @interactions.slash_option(
         "user",
         "The user to hug",
@@ -58,9 +52,7 @@ class Rolelplay(interactions.Extension):
     async def hug(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "hug", user)
 
-    @roleplay.subcommand(
-        "cuddle", sub_cmd_description="Cuddle someone"
-    )
+    @roleplay.subcommand("cuddle", sub_cmd_description="Cuddle someone")
     @interactions.slash_option(
         "user",
         "The user to cuddle",
@@ -70,9 +62,7 @@ class Rolelplay(interactions.Extension):
     async def cuddle(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "cuddle", user)
 
-    @roleplay.subcommand(
-        "kiss", sub_cmd_description="Kiss someone"
-    )
+    @roleplay.subcommand("kiss", sub_cmd_description="Kiss someone")
     @interactions.slash_option(
         "user",
         "The user to kiss",
@@ -82,9 +72,7 @@ class Rolelplay(interactions.Extension):
     async def kiss(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "kiss", user)
 
-    @roleplay.subcommand(
-        "pat", sub_cmd_description="Pat someone"
-    )
+    @roleplay.subcommand("pat", sub_cmd_description="Pat someone")
     @interactions.slash_option(
         "user",
         "The user to pat",
@@ -94,9 +82,7 @@ class Rolelplay(interactions.Extension):
     async def pat(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "pat", user)
 
-    @roleplay.subcommand(
-        "poke", sub_cmd_description="Poke someone"
-    )
+    @roleplay.subcommand("poke", sub_cmd_description="Poke someone")
     @interactions.slash_option(
         "user",
         "The user to poke",
@@ -106,9 +92,7 @@ class Rolelplay(interactions.Extension):
     async def poke(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "poke", user)
 
-    @roleplay.subcommand(
-        "highfive", sub_cmd_description="High five someone"
-    )
+    @roleplay.subcommand("highfive", sub_cmd_description="High five someone")
     @interactions.slash_option(
         "user",
         "The user to high five",
@@ -118,9 +102,7 @@ class Rolelplay(interactions.Extension):
     async def highfive(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "highfive", user)
 
-    @roleplay.subcommand(
-        "slap", sub_cmd_description="Slap someone"
-    )
+    @roleplay.subcommand("slap", sub_cmd_description="Slap someone")
     @interactions.slash_option(
         "user",
         "The user to slap",
@@ -130,9 +112,7 @@ class Rolelplay(interactions.Extension):
     async def slap(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "slap", user)
 
-    @roleplay.subcommand(
-        "wave", sub_cmd_description="Wave at someone"
-    )
+    @roleplay.subcommand("wave", sub_cmd_description="Wave at someone")
     @interactions.slash_option(
         "user",
         "The user to wave at",
@@ -142,9 +122,7 @@ class Rolelplay(interactions.Extension):
     async def wave(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "wave", user)
 
-    @roleplay.subcommand(
-        "cry", sub_cmd_description="Cry"
-    )
+    @roleplay.subcommand("cry", sub_cmd_description="Cry")
     @interactions.slash_option(
         "user",
         "The user to cry to",
@@ -154,9 +132,7 @@ class Rolelplay(interactions.Extension):
     async def cry(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
         await self.send_roleplay(ctx, "cry", user)
 
-    @roleplay.subcommand(
-        "bonk", sub_cmd_description="Bonk someone"
-    )
+    @roleplay.subcommand("bonk", sub_cmd_description="Bonk someone")
     @interactions.slash_option(
         "user",
         "The user to bonk",
@@ -164,17 +140,22 @@ class Rolelplay(interactions.Extension):
         required=False,
     )
     async def bonk(self, ctx: interactions.SlashContext, user: interactions.User | None = None):
-        await self.send_roleplay(ctx, "bonk", user, image_url="https://media1.tenor.com/m/_ZvbLvrT_QcAAAAd/horny-jail-bonk.gif")
+        await self.send_roleplay(ctx, "bonk", user, image_url="https://c.tenor.com/_ZvbLvrT_QcAAAAd/tenor.gif")
 
-
-    async def send_roleplay(self, ctx: interactions.SlashContext, action: str, user: interactions.User | None = None, image_url: Path | str | None = None):
+    async def send_roleplay(
+        self,
+        ctx: interactions.SlashContext,
+        action: str,
+        user: interactions.User | None = None,
+        image_url: Path | str | None = None,
+    ):
         if user is None:
             msg = f"{ctx.author.mention} {action}!"
         else:
             msg = f"{ctx.author.mention} {action_verbs.get(action, action)} {user.mention}!"
 
         e: interactions.Embed = interactions.Embed(
-            title=f"{category_emoji.get(action, "°")} {action.capitalize()}!",
+            title=f"{category_emoji.get(action, '°')} {action.capitalize()}!",
             description=msg,
             color=interactions.Color.random(),
         )
